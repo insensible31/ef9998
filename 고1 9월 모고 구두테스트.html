@@ -1,0 +1,706 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>고1 9월 모고 구두테스트</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;800&display=swap">
+<style>
+/* Layout: 위=제목·지문 하나 당, 가운데=지문 타일(본체=첫 지문부터 여기까지 / 오른쪽 칸=그 지문만 켜고 끄기), 아래 고정 막대=요약+시작. 테스트는 전체화면 카드. */
+:root{
+  /* 9월 모고 단어장 컬러웨이: Oxblood #301014 · Umber #51291E · Clay #B98A7C · Blush #F6EFEC (+ 경고 주황) — 선택 화면은 밝게 고정, 테스트 화면은 짙은 적갈색 고정 */
+  --bg:#FAF7F6; --surface:#FFFFFF; --fg:#1A1112; --muted:#7A6560; --line:#E4D8D3; --soft:#F6EFEC;
+  --sel-bg:#301014; --sel-fg:#FFFFFF; --anchor:#301014; --box:#B98A7C;
+  --go-bg:#301014; --go-fg:#FFFFFF; --alert:#C2410C;
+  --d-bg:#301014; --d-word:#FFFFFF; --d-mean:#F3E3DC; --d-pos:#C9A497; --d-sub:#B79A92; --d-line:#55302C;
+  --d-btn:#45211F; --d-btn-fg:#FFFFFF; --d-main:#F6EFEC; --d-main-fg:#301014; --d-alert:#FF8A5B;
+  --font:"Pretendard","Pretendard Variable","Noto Sans KR","Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+  color-scheme:light;
+}
+[hidden]{display:none!important}
+html,body{height:100%}
+body{background:var(--bg);color:var(--fg);font-family:var(--font);-webkit-text-size-adjust:100%;word-break:keep-all}
+button,select{font:inherit;color:inherit}
+button{touch-action:manipulation;-webkit-tap-highlight-color:transparent;cursor:pointer}
+:focus-visible{outline:3px solid var(--box);outline-offset:2px}
+
+.wrap{max-width:980px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:18px 150px}
+.top{display:flex;flex-wrap:wrap;align-items:flex-end;gap:12px 20px;justify-content:space-between}
+.brand{display:flex;flex-direction:column;gap:3px;min-width:0}
+.brand small{font-size:12px;letter-spacing:.1em;color:var(--muted);font-weight:700}
+.brand h1{margin:0;font-size:24px;font-weight:800;color:var(--sel-bg);text-wrap:balance}
+.brand .sub{font-size:14px;color:var(--muted);font-weight:500}
+.ctrls{display:flex;flex-wrap:wrap;gap:10px}
+.field{display:flex;flex-direction:column;gap:4px;font-size:12px;color:var(--muted);font-weight:700}
+.field select{min-height:46px;padding:0 36px 0 12px;border:1.5px solid var(--line);border-radius:10px;background:var(--surface);font-size:16px;font-weight:700;color:var(--fg);appearance:none;
+  background-image:linear-gradient(45deg,transparent 50%,var(--muted) 50%),linear-gradient(135deg,var(--muted) 50%,transparent 50%);
+  background-position:calc(100% - 18px) 20px,calc(100% - 13px) 20px;background-size:5px 5px;background-repeat:no-repeat}
+
+.help{margin:16px 0 14px;font-size:14px;color:var(--muted);line-height:1.55}
+.help b{color:var(--fg)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
+.tile{display:flex;min-height:72px;border:1.5px solid var(--line);border-radius:12px;background:var(--surface);overflow:hidden}
+.tile .pick{flex:1;min-width:0;display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:2px;padding:8px 8px 8px 12px;border:0;background:none;text-align:left}
+.tile .pick .d{font-size:12px;font-weight:700;color:var(--muted);letter-spacing:.04em}
+.tile .pick .n{font-size:22px;font-weight:800;line-height:1.05;font-variant-numeric:tabular-nums;white-space:nowrap}
+.tile .pick .c{font-size:11px;color:var(--muted)}
+.tile .tick{flex:none;width:48px;display:grid;place-items:center;border:0;border-left:1.5px dashed var(--line);background:var(--soft)}
+.tile .tick span{width:24px;height:24px;border:2px solid var(--box);border-radius:4px;display:grid;place-items:center;box-sizing:border-box}
+.tile .tick svg{width:16px;height:16px;opacity:0}
+.tile.on{border-color:var(--sel-bg);background:var(--sel-bg);color:var(--sel-fg)}
+.tile.on .pick .d,.tile.on .pick .c{color:var(--sel-fg);opacity:.75}
+.tile.on .tick{background:transparent;border-left-color:rgba(255,255,255,.35)}
+.tile.on .tick span{border-color:var(--sel-fg);background:var(--sel-fg)}
+.tile.on .tick svg{opacity:1}
+.tile.on .tick svg path{stroke:var(--sel-bg)}
+.tile.anchor{box-shadow:0 0 0 3px var(--bg),0 0 0 5px var(--alert)}
+.tile.anchor .pick .d::after{content:' · 시작';color:inherit}
+
+.notice{margin:18px 0 0;padding:14px 18px;border:1.5px solid var(--line);border-radius:12px;background:var(--surface);color:var(--muted);font-size:clamp(17px,2.3vw,21px);font-weight:800;line-height:1.5;text-wrap:balance}
+.notice em{font-style:normal;color:var(--alert);white-space:nowrap}
+
+.bar{position:fixed;left:0;right:0;bottom:0;background:var(--surface);border-top:1.5px solid var(--line);padding:12px max(16px,env(safe-area-inset-right,0px)) calc(12px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px));z-index:5}
+.bar .in{max-width:980px;margin:0 auto;display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px}
+.sum{flex:1 1 240px;min-width:0}
+.sum .r{font-size:17px;font-weight:800;line-height:1.3}
+.sum .m{font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums}
+.bar .acts{display:flex;gap:8px;flex-wrap:wrap}
+.btn{min-height:48px;padding:0 18px;border-radius:12px;border:1.5px solid var(--line);background:var(--surface);font-weight:700;font-size:15px}
+.btn.go{background:var(--go-bg);border-color:var(--go-bg);color:var(--go-fg);font-size:17px;padding:0 22px}
+.btn:disabled{opacity:.4;cursor:default}
+
+/* ── 테스트 화면 ── */
+.drill{position:fixed;inset:0;z-index:20;background:var(--d-bg);color:var(--d-word);display:flex;flex-direction:column;
+  padding:env(safe-area-inset-top,0px) env(safe-area-inset-right,0px) env(safe-area-inset-bottom,0px) env(safe-area-inset-left,0px);color-scheme:dark;user-select:none;-webkit-user-select:none}
+.drill,.drill *{-webkit-tap-highlight-color:transparent}
+.dtop{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:12px 18px;font-size:15px;color:var(--d-sub);font-variant-numeric:tabular-nums}
+.dtop .src{font-weight:800;color:var(--d-mean)}
+.dtop .right{display:flex;align-items:center;gap:14px}
+.dtop .peek{min-height:40px;padding:0 14px;border-radius:10px;border:1.5px solid var(--d-line);background:var(--d-btn);color:var(--d-btn-fg);font-weight:700;font-size:14px}
+.prog{height:4px;background:var(--d-line);margin:0 18px;border-radius:4px;overflow:hidden}
+.prog i{display:block;height:100%;background:var(--d-mean);width:0;transition:width .2s}
+.stage{flex:1;min-height:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3vh;padding:2vh 4vw;touch-action:none;cursor:pointer;position:relative;overflow:hidden}
+.word{font-weight:800;line-height:1.08;white-space:nowrap;letter-spacing:-.01em;max-width:100%}
+.mean{min-height:2.6em;display:flex;flex-direction:column;align-items:center;gap:.25em;text-align:center;font-weight:700;color:var(--d-mean);font-size:clamp(24px,4.4vw,60px);line-height:1.3;visibility:hidden;max-width:92vw}
+.mean.show{visibility:visible}
+.mean .pos{display:inline-block;color:var(--d-pos);border:2px solid var(--d-pos);border-radius:8px;font-size:.6em;padding:0 .3em;margin-right:.35em;vertical-align:.15em;font-weight:700}
+.hint{position:absolute;bottom:10px;left:0;right:0;text-align:center;font-size:13px;color:var(--d-sub);opacity:.75}
+.flag{position:absolute;top:14px;right:18px;font-size:15px;font-weight:800;color:#301014;background:var(--d-alert);padding:4px 12px;border-radius:99px;display:none}
+.drill.marked .flag{display:block}
+.dctl{display:grid;grid-template-columns:1fr 1fr 2.2fr 1fr;gap:8px;padding:10px 14px 14px}
+.dctl button{min-height:60px;border-radius:14px;border:1.5px solid var(--d-line);background:var(--d-btn);color:var(--d-btn-fg);font-weight:700;font-size:16px}
+.dctl button.main{background:var(--d-main);color:var(--d-main-fg);border-color:var(--d-main);font-size:19px}
+.dctl button.x.on{background:var(--d-alert);color:#301014;border-color:var(--d-alert)}
+
+/* 틀린 단어 목록 (도중 보기·끝 화면 공용) */
+.panel{flex:1;min-height:0;overflow:auto;display:flex;flex-direction:column;align-items:center;gap:18px;padding:5vh 18px;cursor:pointer}
+.panel h2{margin:0;font-size:clamp(32px,5vw,58px);font-weight:800;text-align:center}
+.panel h2.alert{color:var(--d-alert)}
+.panel p{margin:0;color:var(--d-sub);font-size:clamp(17px,2.2vw,23px);font-weight:700;text-align:center}
+.panel p b{color:var(--d-alert)}
+.panel ul{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,420px),1fr));gap:4px 32px;width:min(1100px,100%)}
+.panel li{display:flex;flex-wrap:wrap;gap:4px 14px;align-items:baseline;padding:14px 0;border-bottom:1px solid var(--d-line);min-width:0}
+.panel li i{font-style:normal;font-size:14px;font-weight:700;color:var(--d-sub);flex-basis:100%}
+.panel li b{font-size:clamp(28px,3.6vw,44px);font-weight:800;color:var(--d-word);overflow-wrap:anywhere}
+.panel li span{font-size:clamp(17px,2vw,24px);font-weight:600;color:var(--d-mean);min-width:0;transition:opacity .15s}
+.panel li span.hide{opacity:0}
+.panel .acts{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;cursor:default}
+.panel .acts button{min-height:56px;padding:0 22px;border-radius:14px;border:1.5px solid var(--d-line);background:var(--d-btn);color:var(--d-btn-fg);font-weight:700;font-size:17px}
+.panel .acts button.main{background:var(--d-main);color:var(--d-main-fg);border-color:var(--d-main)}
+.panel .tip{font-size:14px;color:var(--d-sub);font-weight:500}
+
+@media (pointer:fine){.dctl button{min-height:52px}}
+@media (pointer:coarse){.key{display:none}}
+@media (max-width:640px){
+  .grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:8px} .tile .tick{width:38px} .tile .pick{padding-left:9px} .tile .pick .n{font-size:18px}
+  .ctrls{width:100%} .ctrls .field{flex:1 1 140px} .ctrls .field select{width:100%}
+  .bar .in{flex-wrap:nowrap} .sum{flex:1 1 auto} .sum .r{font-size:15px} .sum .m{font-size:12px}
+  #all{display:none} .btn.go{padding:0 16px;font-size:16px;white-space:nowrap}
+  .dctl{grid-template-columns:1fr 1fr 1fr}.dctl .main{grid-column:1/-1;order:-1}
+}
+@media (prefers-reduced-motion:reduce){.prog i,.panel li span{transition:none}}
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <div class="brand">
+      <small>끝장영어학원 · 구두테스트</small>
+      <h1>9월 고1 모의고사</h1>
+      <span class="sub">김포제일고 1학년 2학기 기말대비 · 20지문 · 359단어</span>
+    </div>
+    <div class="ctrls">
+      <label class="field">지문 하나 당<select id="limit">
+        <option value="auto" selected>자동 (12~15문항)</option><option value="1">1개씩</option><option value="2">2개씩</option><option value="3">3개씩</option><option value="4">4개씩</option><option value="5">5개씩</option>
+      </select></label>
+    </div>
+  </header>
+  <p class="help"><b>지문 번호</b>를 두 번 누르면 <b>첫 지문 → 마지막 지문</b> 사이가 한 번에 잡힙니다(예: 26번 → 33번). 컴퓨터에서는 <b>Shift</b>를 누른 채 끝 지문을 눌러도 됩니다. 오른쪽 <b>네모 칸</b>은 그 지문 하나만 켜고 끕니다.</p>
+  <div class="grid" id="grid"></div>
+  <p class="notice">구두테스트 미통과 시, 일부만 재시험 불가. 항상 <em>★전체를 다시</em> 구두테스트 봅니다.</p>
+</div>
+
+<div class="bar"><div class="in">
+  <div class="sum"><div class="r" id="sumR"></div><div class="m" id="sumM"></div></div>
+  <div class="acts">
+    <button type="button" class="btn" id="all">전체 선택</button>
+    <button type="button" class="btn go" id="start">구두테스트 시작 ▶</button>
+  </div>
+</div></div>
+
+<div class="drill" id="drill" hidden>
+  <div class="dtop">
+    <span class="src" id="dSrc">9월 고1</span>
+    <span class="right"><button type="button" class="peek" id="peek">틀린 것 보기 <span class="key">(W)</span></button><span id="dCnt">1 / 15</span></span>
+  </div>
+  <div class="prog"><i id="dProg"></i></div>
+  <div class="stage" id="stage">
+    <span class="flag">✗ 틀림</span>
+    <div class="word" id="dWord"></div>
+    <div class="mean" id="dMean"></div>
+    <div class="hint"><span class="key">Space 뜻·다음 · ← 이전 · X 틀림 · W 틀린 것 보기 · Esc 나가기</span></div>
+  </div>
+  <div class="dctl" id="dCtl">
+    <button type="button" id="bPrev">← 이전</button>
+    <button type="button" class="x" id="bMark">✗ 틀림</button>
+    <button type="button" class="main" id="bMain">뜻 보기</button>
+    <button type="button" id="bExit">나가기</button>
+  </div>
+  <div class="panel" id="panel" hidden></div>
+</div>
+
+<script>
+/* 지문 · 번호 · 영어 · 뜻 · 난이도(상/중/하). 하 = 테스트에서 제외 */
+const W = [
+["20번", 1, "entertaining", "즐거움을 주는, 재미있는", "중"],
+["20번", 2, "commercial", "[형]상업용의", "중"],
+["20번", 3, "be measured", "측정되다, 평가되다", "하"],
+["20번", 4, "achievement", "달성, 성취", "중"],
+["20번", 5, "learning outcome", "학습 성과", "하"],
+["20번", 6, "resist", "억누르다, 참다", "상"],
+["20번", 7, "temptation", "유혹", "중"],
+["20번", 8, "a ton of", "아주 많은", "하"],
+["20번", 9, "pile on", "쌓아 올리다", "상"],
+["20번", 10, "incorporate", "포함시키다, 집어넣다", "상"],
+["20번", 11, "dynamics", "역학, 작동 방식", "상"],
+["20번", 12, "engaging", "몰입하게 하는", "중"],
+["20번", 13, "mild", "가벼운, 적당한", "중"],
+["20번", 14, "engagement", "참여, 몰입", "상"],
+["20번", 15, "interactivity", "상호작용성", "상"],
+["20번", 16, "instructional", "교육적인", "상"],
+["20번", 17, "given", "~을 고려하면", "상"],
+["20번", 18, "parameter", "(한정) 요인", "상"],
+["21번", 1, "participate in", "~에 참여하다", "하"],
+["21번", 2, "spend one's time ~ing", "~하며 시간을 보내다", "하"],
+["21번", 3, "nowhere", "아무 데도 (~않는)", "하"],
+["21번", 4, "occupy", "차지하다", "상"],
+["21번", 5, "square footage", "제곱 피트의 면적", "상"],
+["21번", 6, "be held captive", "사로잡혀 있다", "상"],
+["21번", 7, "socialize", "사람들과 어울리다", "중"],
+["21번", 8, "cue", "[명]신호", "상"],
+["21번", 9, "movement repertoire", "움직임 목록, 움직임의 밑천", "상"],
+["21번", 10, "the very thing", "바로 그것", "하"],
+["21번", 11, "mature", "[형]성숙한", "상"],
+["21번", 12, "skip", "[동]깡충 뛰다", "상"],
+["21번", 13, "live with", "~을 안고 살아가다", "하"],
+["21번", 14, "anxiety", "불안", "중"],
+["21번", 15, "depression", "우울", "중"],
+["21번", 16, "be meant to do", "~하기로 되어 있다", "상"],
+["21번", 17, "get away from", "~로부터 멀어지다", "하"],
+["21번", 18, "extraordinary", "특별한", "상"],
+["22번", 1, "the Law of Attraction", "끌어당김의 법칙", "상"],
+["22번", 2, "attract", "끌어당기다", "하"],
+["22번", 3, "state", "[동]말하다, 밝히다", "상"],
+["22번", 4, "bring about", "가져오다, 초래하다", "상"],
+["22번", 5, "flaw", "오류, 결함", "상"],
+["22번", 6, "visualize", "시각화하다, 머릿속에 그리다", "상"],
+["22번", 7, "manifest", "[동]실현하다", "상"],
+["22번", 8, "vibration", "진동", "상"],
+["22번", 9, "magnetic", "끌어당기는 힘이 있는", "상"],
+["22번", 10, "belief system", "신념 체계", "중"],
+["22번", 11, "affirm", "확언하다", "상"],
+["22번", 12, "be available for", "~을 누릴 준비가 되어 있다", "상"],
+["22번", 13, "passionate", "열정적인", "중"],
+["22번", 14, "worthy", "가치 있는", "상"],
+["22번", 15, "deserving", "그럴 자격이 있는", "상"],
+["22번", 16, "contradict", "모순되다, 어긋나다", "상"],
+["22번", 17, "upgrade A to B", "A를 B로 끌어올리다", "상"],
+["22번", 18, "be in line with", "~와 일치하다", "상"],
+["23번", 1, "variation", "변이, 다양성", "중"],
+["23번", 2, "critical", "결정적인", "상"],
+["23번", 3, "insight", "통찰", "상"],
+["23번", 4, "prerequisite", "선행 조건", "상"],
+["23번", 5, "natural selection", "자연선택", "중"],
+["23번", 6, "catastrophic", "재앙적인", "상"],
+["23번", 7, "drop", "[명]감소", "중"],
+["23번", 8, "food supply", "식량 공급", "하"],
+["23번", 9, "be wiped out", "완전히 사라지다", "상"],
+["23번", 10, "survivor", "생존자", "하"],
+["23번", 11, "catastrophe", "재앙", "중"],
+["23번", 12, "be well suited for", "~에 잘 맞다", "중"],
+["23번", 13, "principle", "원리", "중"],
+["23번", 14, "apply to", "~에 적용되다", "중"],
+["23번", 15, "strike", "[동](재난이) 닥치다", "상"],
+["23번", 16, "extinct", "멸종한", "중"],
+["23번", 17, "preserve", "보존하다, 지키다", "중"],
+["23번", 18, "evolvability", "진화 가능성", "상"],
+["24번", 1, "let go of", "~을 놓아 주다", "중"],
+["24번", 2, "uncertainty", "불확실성", "중"],
+["24번", 3, "frightened", "겁먹은", "하"],
+["24번", 4, "inflexible", "경직된, 뻣뻣한", "상"],
+["24번", 5, "pretend", "~인 척하다", "하"],
+["24번", 6, "predictable", "예측 가능한", "중"],
+["24번", 7, "enormous", "엄청난", "하"],
+["24번", 8, "cling to", "~에 매달리다", "상"],
+["24번", 9, "turn out", "결과가 나오다", "중"],
+["24번", 10, "ever so", "정말 몹시", "상"],
+["24번", 11, "desperately", "절박하게", "상"],
+["24번", 12, "there is nothing wrong with ~ing", "~하는 것에는 아무 잘못이 없다", "상"],
+["24번", 13, "come to fruition", "결실을 맺다", "상"],
+["24번", 14, "worthless", "쓸모없는", "중"],
+["24번", 15, "figuratively", "비유적으로", "상"],
+["24번", 16, "literally", "문자 그대로", "중"],
+["24번", 17, "bear in mind", "명심하다, 마음에 새기다", "상"],
+["24번", 18, "be all right with", "~에 대해 괜찮다", "중"],
+["26번", 1, "anthropologist", "인류학자", "상"],
+["26번", 2, "physician", "의사", "상"],
+["26번", 3, "awareness", "인식", "중"],
+["26번", 4, "inequality", "불평등", "중"],
+["26번", 5, "be fluent in", "~에 유창하다", "중"],
+["26번", 6, "benefit", "[동]이롭게 하다, 도움이 되다", "중"],
+["26번", 7, "graduate from", "~을 졸업하다", "하"],
+["26번", 8, "earn", "(학위를) 취득하다, 얻다", "중"],
+["26번", 9, "master's degree", "석사 학위", "하"],
+["26번", 10, "PhD", "박사 학위", "하"],
+["26번", 11, "co-found", "공동 설립하다", "상"],
+["26번", 12, "medical treatment", "의료, 치료", "하"],
+["26번", 13, "strengthen", "강화하다", "하"],
+["26번", 14, "academic paper", "학술 논문", "하"],
+["26번", 15, "be honored with", "~을 수여받다", "상"],
+["26번", 16, "lifelong", "평생의", "중"],
+["26번", 17, "the poor", "가난한 사람들", "하"],
+["29번", 1, "athletic performance", "운동 수행 능력", "중"],
+["29번", 2, "aerobic respiration", "유산소 호흡", "상"],
+["29번", 3, "anaerobic respiration", "무산소 호흡", "상"],
+["29번", 4, "be generated", "생성되다", "상"],
+["29번", 5, "glucose", "포도당", "상"],
+["29번", 6, "simple sugar", "단순당", "중"],
+["29번", 7, "access", "[동]이용하다, 접근하다", "중"],
+["29번", 8, "inefficient", "비효율적인", "중"],
+["29번", 9, "toxic", "독성이 있는", "중"],
+["29번", 10, "lactic acid", "젖산", "상"],
+["29번", 11, "sickness", "메스꺼움, 아픔", "중"],
+["29번", 12, "push it too hard", "자신을 지나치게 몰아붙이다", "상"],
+["29번", 13, "intense", "고강도의", "중"],
+["29번", 14, "miserable", "힘든, 괴로운", "중"],
+["29번", 15, "respiratory system", "호흡계", "상"],
+["29번", 16, "catch up", "따라잡다", "하"],
+["29번", 17, "be warmed up", "몸이 풀리다", "하"],
+["29번", 18, "switch from A to B", "A에서 B로 전환하다", "하"],
+["30번", 1, "paragraph", "단락", "하"],
+["30번", 2, "catch", "[동]사로잡다", "중"],
+["30번", 3, "put air", "여백을 두다", "중"],
+["30번", 4, "inviting", "[형]끌리는, 매력적인", "상"],
+["30번", 5, "whereas", "반면에", "상"],
+["30번", 6, "chunk", "덩어리", "상"],
+["30번", 7, "type", "[명]활자", "중"],
+["30번", 8, "discourage", "꺼리게 만들다", "상"],
+["30번", 9, "be set", "(활자가) 짜이다, 배치되다", "중"],
+["30번", 10, "add up", "쌓이다, 늘어나다", "중"],
+["30번", 11, "be obsessed by", "~에 사로잡히다", "상"],
+["30번", 12, "go for miles", "몇 마일이고 계속 가다", "하"],
+["30번", 13, "relief", "쉼, 한숨 돌림", "상"],
+["30번", 14, "outweigh", "~보다 크다, 능가하다", "상"],
+["30번", 15, "go too far", "도를 넘다, 지나치게 하다", "하"],
+["30번", 16, "succession", "연속", "상"],
+["30번", 17, "chop up", "잘게 자르다", "중"],
+["30번", 18, "train of thought", "생각의 흐름", "중"],
+["31번", 1, "taste", "[명]취향, 입맛", "하"],
+["31번", 2, "presumably", "아마도", "상"],
+["31번", 3, "mess up", "망쳐 놓다", "중"],
+["31번", 4, "decade", "십 년", "하"],
+["31번", 5, "particular", "특정한", "중"],
+["31번", 6, "spread", "[동]퍼지다", "중"],
+["31번", 7, "irrespective of", "~와 무관하게", "상"],
+["31번", 8, "quality", "[명]특성, 질", "중"],
+["31번", 9, "involved", "관련된", "중"],
+["31번", 10, "judgmentally", "비판적으로", "상"],
+["31번", 11, "turn A off B", "A가 B에서 마음이 떠나게 하다", "상"],
+["31번", 12, "wrong", "[형]엉뚱한, 어울리지 않는", "중"],
+["31번", 13, "by which I mean", "내가 그 말로 뜻하는 바는", "중"],
+["31번", 14, "identical to", "~와 동일한", "상"],
+["31번", 15, "in every respect", "모든 면에서", "상"],
+["31번", 16, "flatter", "돋보이게 하다", "상"],
+["31번", 17, "viral", "바이러스처럼 퍼지는", "상"],
+["31번", 18, "by the skin of one's teeth", "간신히, 가까스로", "상"],
+["32번", 1, "Stoic philosophy", "스토아 철학", "상"],
+["32번", 2, "arise from", "~로부터 생겨나다", "상"],
+["32번", 3, "judgment", "판단", "중"],
+["32번", 4, "sound", "[동]~하게 들리다", "하"],
+["32번", 5, "be overwhelmed by", "~에 압도되다", "상"],
+["32번", 6, "be shaped by", "~에 의해 형성되다", "상"],
+["32번", 7, "interpret", "해석하다", "하"],
+["32번", 8, "interpretation", "해석", "중"],
+["32번", 9, "trigger", "[동]일으키다, 촉발하다", "상"],
+["32번", 10, "criticize", "비난하다", "하"],
+["32번", 11, "perceive A as B", "A를 B로 여기다", "상"],
+["32번", 12, "threatening", "위협적인", "중"],
+["32번", 13, "feel devastated", "망연자실해지다", "상"],
+["32번", 14, "define", "규정하다", "하"],
+["32번", 15, "worth", "[명]가치", "중"],
+["32번", 16, "mean ~ing", "~하는 것을 뜻하다", "하"],
+["32번", 17, "suppress", "억누르다", "상"],
+["32번", 18, "examine", "점검하다, 살펴보다", "하"],
+["33번", 1, "ancient", "고대의", "하"],
+["33번", 2, "approach", "[명]접근 방식", "하"],
+["33번", 3, "realism", "사실주의", "중"],
+["33번", 4, "sculpture", "조각", "중"],
+["33번", 5, "pottery", "도자기", "중"],
+["33번", 6, "note", "[동]주목하다", "하"],
+["33번", 7, "action", "[명]작용", "하"],
+["33번", 8, "surmise", "짐작하다", "상"],
+["33번", 9, "tale", "이야기", "중"],
+["33번", 10, "survive", "[동]남아 있다", "하"],
+["33번", 11, "the New York School", "뉴욕 화파", "상"],
+["33번", 12, "intentionally", "의도적으로", "상"],
+["33번", 13, "object", "[명]사물", "하"],
+["33번", 14, "resemble", "닮다", "상"],
+["33번", 15, "recognizable", "알아볼 수 있는", "중"],
+["33번", 16, "demonstrate", "보여 주다, 입증하다", "중"],
+["33번", 17, "mimesis", "모사, 흉내 내기", "상"],
+["33번", 18, "sufficiently", "충분히", "상"],
+["34번", 1, "know best", "가장 잘 알다", "하"],
+["34번", 2, "be injured", "다치다", "하"],
+["34번", 3, "seemingly", "겉보기에", "상"],
+["34번", 4, "administer", "처리하다", "상"],
+["34번", 5, "computation", "계산", "상"],
+["34번", 6, "untethered", "매인 줄이 풀린 채", "상"],
+["34번", 7, "wherever", "~하는 곳이 어디든", "중"],
+["34번", 8, "intelligence", "지능", "중"],
+["34번", 9, "conscious", "의식적인", "중"],
+["34번", 10, "complicated", "복잡한", "중"],
+["34번", 11, "be buried", "묻혀 있다", "중"],
+["34번", 12, "muscle fibre", "근섬유", "상"],
+["34번", 13, "cell", "세포", "하"],
+["34번", 14, "complexity", "복잡성", "중"],
+["34번", 15, "feel one's way", "더듬어 나아가다", "상"],
+["34번", 16, "alchemy", "연금술", "상"],
+["34번", 17, "sense", "[명]감각", "상"],
+["34번", 18, "firing", "[명](신경의) 작동", "상"],
+["35번", 1, "criterion", "기준", "상"],
+["35번", 2, "care for", "~을 돌보다", "하"],
+["35번", 3, "impact", "[동]영향을 미치다", "상"],
+["35번", 4, "encounter", "마주치다", "중"],
+["35번", 5, "bathe", "목욕시키다", "상"],
+["35번", 6, "religiously", "계율을 지키듯 꼬박꼬박", "상"],
+["35번", 7, "veterinary dermatologist", "수의 피부과 전문의", "상"],
+["35번", 8, "warn against", "~에 대해 경고하다", "상"],
+["35번", 9, "practice", "[명]관행", "중"],
+["35번", 10, "thoroughly", "꼼꼼히", "상"],
+["35번", 11, "brush", "[동]빗질하다", "하"],
+["35번", 12, "keep down", "줄여서 유지하다", "상"],
+["35번", 13, "at most", "많아야, 기껏해야", "중"],
+["35번", 14, "prescribe", "처방하다", "상"],
+["35번", 15, "on a regular basis", "정기적으로", "중"],
+["35번", 16, "severe", "심각한", "중"],
+["35번", 17, "treat", "[동]치료하다", "중"],
+["35번", 18, "coat", "[명]털", "하"],
+["36번", 1, "concern", "[명]관심사", "중"],
+["36번", 2, "symmetry", "대칭", "상"],
+["36번", 3, "appear", "실리다, 나타나다", "하"],
+["36번", 4, "objective", "[명]목표", "상"],
+["36번", 5, "grid", "격자", "중"],
+["36번", 6, "clue", "단서", "하"],
+["36번", 7, "ensure", "확실히 하다", "중"],
+["36번", 8, "digit", "숫자", "하"],
+["36번", 9, "once and only once", "한 번 그리고 오직 한 번만", "상"],
+["36번", 10, "irrelevant", "관련 없는", "상"],
+["36번", 11, "distinct", "별개의, 서로 다른", "상"],
+["36번", 12, "matter", "[동]중요하다", "하"],
+["36번", 13, "publish", "게재하다, 싣다", "하"],
+["36번", 14, "reasoning", "추론", "상"],
+["36번", 15, "be spoiled by", "~에 의해 망쳐지다", "상"],
+["36번", 16, "scare off", "겁주어 쫓아 버리다", "상"],
+["36번", 17, "potential", "[형]잠재적인", "중"],
+["36번", 18, "promotion", "홍보", "중"],
+["37번", 1, "telescope", "망원경", "하"],
+["37번", 2, "look out into", "~로 내다보다", "하"],
+["37번", 3, "peoples", "[명]민족들", "중"],
+["37번", 4, "map", "[동]지도로 만들다", "중"],
+["37번", 5, "travel around", "~ 주위를 돌다", "하"],
+["37번", 6, "objection to", "~에 대한 반대", "상"],
+["37번", 7, "astronomer", "천문학자", "상"],
+["37번", 8, "build on", "~을 바탕으로 삼다", "중"],
+["37번", 9, "mathematician", "수학자", "하"],
+["37번", 10, "put forth", "내놓다, 제기하다", "상"],
+["37번", 11, "revolutionary", "혁명적인", "상"],
+["37번", 12, "take measurements", "측정하다", "하"],
+["37번", 13, "by eye", "맨눈으로", "하"],
+["37번", 14, "conclude", "결론짓다", "중"],
+["37번", 15, "view", "[명]관점", "하"],
+["37번", 16, "crater", "분화구", "상"],
+["37번", 17, "confirm", "확인하다, 확증하다", "중"],
+["37번", 18, "advance", "[동]발전시키다", "중"],
+["38번", 1, "unit of measurement", "측정 단위", "하"],
+["38번", 2, "consistency", "일관성", "상"],
+["38번", 3, "subjective", "주관적인", "상"],
+["38번", 4, "measure", "[명]측정, 측정값", "중"],
+["38번", 5, "based as it is on", "~에 기반하고 있기 때문에", "상"],
+["38번", 6, "historian", "역사학자", "하"],
+["38번", 7, "bridge", "[동]메우다, 잇다", "상"],
+["38번", 8, "geography", "지리", "하"],
+["38번", 9, "allow for", "~을 가능하게 하다", "상"],
+["38번", 10, "just as with", "~와 마찬가지로", "중"],
+["38번", 11, "reliable", "믿을 만한", "중"],
+["38번", 12, "settlement", "정착지, 마을", "상"],
+["38번", 13, "grow in size", "규모가 커지다", "하"],
+["38번", 14, "inadequacy", "불충분함, 한계", "상"],
+["38번", 15, "evident", "분명한", "중"],
+["38번", 16, "disagreement", "의견 충돌, 다툼", "상"],
+["38번", 17, "trade", "[명]무역", "하"],
+["38번", 18, "tribute", "조공", "상"],
+["39번", 1, "colony", "군락", "상"],
+["39번", 2, "leaf-cutter ant", "잎꾼개미", "상"],
+["39번", 3, "cultivate", "경작하다, 길러 내다", "상"],
+["39번", 4, "set forth from", "~에서 나서다, 출발하다", "상"],
+["39번", 5, "nest", "둥지", "하"],
+["39번", 6, "vegetation", "식물", "상"],
+["39번", 7, "chew off", "씹어 떼어 내다", "중"],
+["39번", 8, "carry back to", "~로 다시 나르다", "하"],
+["39번", 9, "worker ant", "일개미", "하"],
+["39번", 10, "chew A into B", "A를 씹어 B로 만들다", "중"],
+["39번", 11, "fertilizer", "비료", "상"],
+["39번", 12, "fungus", "균류", "상"],
+["39번", 13, "feed", "[동]먹이를 주다", "하"],
+["39번", 14, "blossom into", "~로 피어나다", "상"],
+["39번", 15, "fruiting body", "자실체", "상"],
+["39번", 16, "span", "[동]~에 걸치다", "상"],
+["39번", 17, "perfect", "[동]완성하다", "상"],
+["39번", 18, "civilization", "문명", "중"],
+["40번", 1, "evolutionary", "진화의", "상"],
+["40번", 2, "perspective", "관점", "중"],
+["40번", 3, "self-esteem", "자아존중감", "중"],
+["40번", 4, "monitoring mechanism", "감시 기제", "상"],
+["40번", 5, "alarm", "[명]경보", "하"],
+["40번", 6, "alert A to B", "A에게 B를 알리다", "상"],
+["40번", 7, "inclusion status", "포함 상태", "상"],
+["40번", 8, "nonconsciously", "무의식적으로", "상"],
+["40번", 9, "detect", "탐지하다, 알아채다", "중"],
+["40번", 10, "relational value", "관계적 가치", "상"],
+["40번", 11, "threat to", "~에 대한 위협", "중"],
+["40번", 12, "be pushed out", "밀려나다", "중"],
+["40번", 13, "adjust", "조정하다", "중"],
+["40번", 14, "mobilize", "동원하다", "상"],
+["40번", 15, "attend to", "~에 주의를 기울이다", "상"],
+["40번", 16, "rejection", "거절", "중"],
+["40번", 17, "interpersonal", "대인 관계의", "상"],
+["40번", 18, "assess", "평가하다", "중"],
+["41~42번", 1, "slang", "슬랭, 속어", "중"],
+["41~42번", 2, "fundamentally", "근본적으로", "상"],
+["41~42번", 3, "emergence", "등장", "상"],
+["41~42번", 4, "be in charge", "주도권을 쥐다", "중"],
+["41~42번", 5, "prescriptive norm", "규범적 기준", "상"],
+["41~42번", 6, "dominate", "지배하다", "상"],
+["41~42번", 7, "work within", "~ 안에서 활동하다", "중"],
+["41~42번", 8, "conform to", "~에 순응하다", "상"],
+["41~42번", 9, "barrier", "장벽", "중"],
+["41~42번", 10, "level playing field", "공평한 경쟁의 장", "상"],
+["41~42번", 11, "be democratized", "민주화되다", "상"],
+["41~42번", 12, "be left to do", "~할 사람이 남아 있다", "상"],
+["41~42번", 13, "enforce", "강제하다", "상"],
+["41~42번", 14, "legitimize", "정당한 것으로 만들다", "상"],
+["41~42번", 15, "term", "[명]용어", "하"],
+["41~42번", 16, "go beyond", "~을 넘어서다", "중"],
+["41~42번", 17, "loose", "느슨한", "중"],
+["41~42번", 18, "at a rapid pace", "빠른 속도로", "중"],
+["43~45번", 1, "merchant", "상인", "중"],
+["43~45번", 2, "journey", "여정", "하"],
+["43~45번", 3, "parrot", "앵무새", "하"],
+["43~45번", 4, "cage", "새장", "하"],
+["43~45번", 5, "no matter how much", "아무리 많이 ~해도", "하"],
+["43~45번", 6, "let A out of B", "A를 B 밖으로 내보내다", "하"],
+["43~45번", 7, "for fear of", "~할까 두려워", "상"],
+["43~45번", 8, "deliver", "(말을) 전하다", "중"],
+["43~45번", 9, "tremble", "떨다", "중"],
+["43~45번", 10, "fall down dead", "쓰러져 죽다", "하"],
+["43~45번", 11, "can't believe one's eyes", "자기 눈을 믿을 수 없다", "하"],
+["43~45번", 12, "trickle down", "타고 흘러내리다", "상"],
+["43~45번", 13, "hold A in one's arms", "A를 품에 안다", "하"],
+["43~45번", 14, "trick", "속임수, 꾀", "하"],
+["43~45번", 15, "play dead", "죽은 척하다", "하"],
+["43~45번", 16, "wealth", "부, 재산", "하"],
+["43~45번", 17, "have the company of", "~와 함께하다", "상"],
+["43~45번", 18, "occasionally", "가끔씩", "하"]
+].map(([p,n,en,ko,lv])=>({p,n,en,ko,lv}));
+
+const GROUPS = [...new Set(W.map(w=>w.p))].map(p=>({p,words:W.filter(w=>w.p===p)}));
+const inG=(w,i)=>w.p===GROUPS[i].p;
+const $ = id=>document.getElementById(id);
+const KEY='kj-g1-sep-oral-v1';
+let sel=new Set(GROUPS.map((_,i)=>i)), anchor=GROUPS.length-1;
+try{ const st=JSON.parse(localStorage.getItem(KEY)||'null'); if(st){ if(Array.isArray(st.sel)) sel=new Set(st.sel.filter(i=>i>=0&&i<GROUPS.length)); if(st.anchor!=null) anchor=st.anchor; if(st.limit!=null) $('limit').value=String(st.limit);} }catch(e){}
+function persist(){ try{ localStorage.setItem(KEY,JSON.stringify({sel:[...sel],anchor,limit:$('limit').value})); }catch(e){} }
+
+const CHECK='<svg viewBox="0 0 16 16"><path d="M3 8.5l3.2 3L13 4.5" fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+function drawGrid(){
+  $('grid').innerHTML = GROUPS.map((g,i)=>{
+    return `<div class="tile${sel.has(i)?' on':''}${pending&&anchor===i?' anchor':''}" data-i="${i}">
+      <button type="button" class="pick" aria-label="${g.p} 구간 시작 또는 끝으로 선택"><span class="d">지문</span><span class="n">${g.p}</span><span class="c">${g.words.length}단어</span></button>
+      <button type="button" class="tick" aria-label="${g.p} 켜고 끄기" aria-pressed="${sel.has(i)}"><span>${CHECK}</span></button></div>`;
+  }).join('');
+}
+let pending=false;
+$('grid').addEventListener('click',e=>{
+  const t=e.target.closest('.tile'); if(!t) return; const i=+t.dataset.i;
+  if(e.target.closest('.pick')){
+    /* 숫자 누르기: 첫 번째 = 시작 지문, 두 번째 = 끝 지문(그 사이 전부). Shift+클릭은 시작 지문에서 바로 구간 */
+    if((e.shiftKey||pending) && anchor!=null){ const a=Math.min(anchor,i), b=Math.max(anchor,i); sel=new Set(); for(let k=a;k<=b;k++) sel.add(k); pending=false; }
+    else { sel=new Set([i]); anchor=i; pending=true; }
+  }
+  else if(e.target.closest('.tick')){ sel.has(i)?sel.delete(i):sel.add(i); pending=false; }
+  update();
+});
+function rangeText(){
+  const idx=[...sel].sort((a,b)=>a-b); if(!idx.length) return '지문을 고르세요';
+  const nm=i=>GROUPS[i].p.replace('번','');
+  const parts=[]; let a=idx[0],p=idx[0];
+  for(const i of idx.slice(1).concat([null])){ if(i===p+1){p=i;continue;} parts.push(a===p?GROUPS[a].p:(/~|Read/.test(GROUPS[p].p)?GROUPS[a].p+' ~ '+GROUPS[p].p:nm(a)+'~'+GROUPS[p].p)); if(i!=null){a=p=i;} }
+  return parts.join(', ');
+}
+function selectedWords(){ return W.filter(w=>[...sel].some(i=>inG(w,i))); }
+/* 자동: 총 12~15문항 (지문 1개 12 · 2개 6 · 3개 4 · 4~5개 3 · 6~7개 2 · 8~12개 총 12 · 13~15개 1 · 16개 이상 무작위 15지문 1) */
+function quotas(n){ const v=$('limit').value; if(v!=='auto') return Array(n).fill(+v);
+  const even={1:12,2:6,3:4,4:3,5:3,6:2,7:2}; if(even[n]) return Array(n).fill(even[n]);
+  if(n<=12){ const q=Array(n).fill(1); for(let k=n-1,r=12-n;r>0;k=(k-1+n)%n,r--) q[k]++; return q; }
+  if(n<=15) return Array(n).fill(1);
+  const pick=new Set(shuffle([...Array(n).keys()]).slice(0,15)); return [...Array(n).keys()].map(k=>pick.has(k)?1:0); }
+function update(){
+  drawGrid();
+  const ws=selectedWords(), n=sel.size; let tot=0;
+  if(n){ const q=quotas(n); [...sel].sort((a,b)=>a-b).forEach((i,k)=>{ tot+=Math.min(q[k],GROUPS[i].words.filter(w=>w.lv!=='하').length); }); }
+  $('sumR').textContent=rangeText();
+  $('sumM').textContent = ws.length ? `${n}개 지문 · ${ws.length}단어 중 ${tot}개 출제` : '';
+  $('start').disabled=!ws.length;
+  $('all').textContent = sel.size===GROUPS.length ? '전체 해제' : '전체 선택';
+  persist();
+}
+$('limit').addEventListener('change',update);
+$('all').addEventListener('click',()=>{ if(sel.size===GROUPS.length){sel.clear();anchor=null;} else {sel=new Set(GROUPS.map((_,i)=>i)); anchor=GROUPS.length-1;} update(); });
+
+function shuffle(a){ a=a.slice(); for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]];} return a; }
+/* 출제: 고른 지문마다 정해진 개수 → 구간 안에서 약 80%는 '상', 나머지 '중'. '하'는 출제하지 않음 */
+function buildDeck(){
+  const groups=[...sel].sort((a,b)=>a-b).map(i=>GROUPS[i].words.filter(w=>w.lv!=='하'));
+  const q=quotas(groups.length).map((v,k)=>Math.min(v,groups[k].length));
+  let deck=[];
+  groups.forEach((g,k)=>{
+    const hi=shuffle(g.filter(w=>w.lv==='상')), mid=shuffle(g.filter(w=>w.lv==='중'));
+    let wantHi=Math.min(hi.length,Math.round(q[k]*0.8)), wantMid=Math.min(mid.length,q[k]-wantHi);
+    wantHi=Math.min(hi.length,q[k]-wantMid);
+    deck=deck.concat(hi.slice(0,wantHi),mid.slice(0,wantMid));
+  });
+  return shuffle(deck);
+}
+
+/* ── 테스트 ── */
+let deck=[],pos=0,shown=false,marks=new Set(),mode='card',wakeLock=null,reveal=0,listItems=[];
+function esc(s){ return s.replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+function fmtMean(ko){
+  return ko.split(/;\s*/).map(seg=>{ const m=seg.match(/^\[(형|명|동|부)\](.*)$/); return '<div>'+(m?'<span class="pos">'+m[1]+'</span>'+esc(m[2]):esc(seg))+'</div>'; }).join('');
+}
+function plainMean(ko){ return ko.replace(/\[(형|명|동|부)\]/g,'($1) '); }
+function fitWord(){
+  const el=$('dWord'), st=$('stage'); const base=Math.min(window.innerWidth*0.15, window.innerHeight*0.22, 280);
+  el.style.fontSize=base+'px';
+  const avail=st.clientWidth*0.92; if(el.scrollWidth>avail) el.style.fontSize=Math.max(28,base*avail/el.scrollWidth)+'px';
+}
+function openDrill(){
+  deck=buildDeck(); pos=0; shown=false; marks=new Set(); mode='card';
+  $('drill').hidden=false; document.body.style.overflow='hidden';
+  try{ navigator.wakeLock&&navigator.wakeLock.request('screen').then(l=>wakeLock=l).catch(()=>{}); }catch(e){}
+  try{ const el=document.documentElement; if(el.requestFullscreen&&matchMedia('(pointer:fine)').matches) el.requestFullscreen().catch(()=>{}); }catch(e){}
+  render();
+}
+function closeDrill(){
+  $('drill').hidden=true; document.body.style.overflow='';
+  try{ wakeLock&&wakeLock.release(); wakeLock=null; }catch(e){}
+  try{ document.fullscreenElement&&document.exitFullscreen().catch(()=>{}); }catch(e){}
+}
+$('start').addEventListener('click',openDrill);
+function render(){
+  const card=mode==='card';
+  $('stage').hidden=!card; $('dCtl').hidden=!card; $('panel').hidden=card; $('peek').hidden=(mode==='end');
+  $('dCnt').textContent = card||mode==='peek' ? `${Math.min(pos+1,deck.length)} / ${deck.length}` : `${deck.length}개`;
+  $('dProg').style.width = (mode==='end'?100:pos/deck.length*100)+'%';
+  if(card){
+    const w=deck[pos];
+    $('dSrc').textContent='9월 고1 · '+w.p+(w.p==='Read More'?' ':'-')+w.n;
+    $('dWord').textContent=w.en; $('dMean').innerHTML=fmtMean(w.ko);
+    $('dMean').classList.toggle('show',shown);
+    $('bMain').textContent = shown ? (pos===deck.length-1?'끝내기':'다음 →') : '뜻 보기';
+    $('drill').classList.toggle('marked',marks.has(pos)); $('bMark').classList.toggle('on',marks.has(pos));
+    $('bPrev').disabled=pos===0;
+    fitWord();
+  } else drawPanel();
+}
+function main(){ if(!shown){shown=true;render();return;} if(pos<deck.length-1){pos++;shown=false;render();} else {mode='end';reveal=0;render();} }
+function prev(){ if(pos>0){pos--;shown=false;render();} }
+function toggleMark(){ marks.has(pos)?marks.delete(pos):marks.add(pos); render(); }
+function openPeek(){ if(mode!=='card') return; mode='peek'; reveal=0; render(); }
+
+function drawPanel(){
+  const wrong=deck.filter((_,i)=>marks.has(i)); listItems=wrong;
+  let head;
+  if(mode==='peek') head=`<h2 class="alert">지금까지 틀린 단어 ${wrong.length}개</h2>`;
+  else head=`<h2>${deck.length}개 끝!</h2><p>${wrong.length?'틀림 표시 <b>'+wrong.length+'개</b>':'틀림 표시 없음'}</p>`;
+  const list = wrong.length ? '<ul>'+wrong.map((w,i)=>`<li><i>${w.p} · ${w.n}</i><b>${esc(w.en)}</b><span class="${i<reveal?'':'hide'}">${esc(plainMean(w.ko))}</span></li>`).join('')+'</ul>'
+    + (reveal<wrong.length?'<p class="tip">화면을 누르거나 → / Space로 뜻을 하나씩 펼칩니다</p>':'') : '';
+  const acts = mode==='peek'
+    ? `<div class="acts">${wrong.length&&reveal<wrong.length?'<button type="button" data-a="all">뜻 모두 보기</button>':''}<button type="button" class="main" data-a="back">계속하기</button></div>`
+    : `<div class="acts">${wrong.length&&reveal<wrong.length?'<button type="button" data-a="all">뜻 모두 보기</button>':''}<button type="button" class="main" data-a="again">★전체 다시 (새 단어)</button><button type="button" data-a="home">선택 화면으로</button></div>`;
+  $('panel').innerHTML=head+list+acts;
+}
+$('panel').addEventListener('click',e=>{
+  const b=e.target.closest('button[data-a]');
+  if(b){ const a=b.dataset.a;
+    if(a==='all'){reveal=listItems.length;render();}
+    else if(a==='back'){mode='card';render();}
+    else if(a==='again'){openDrill();}
+    else if(a==='home'){closeDrill();}
+    return; }
+  if(e.target.closest('.acts')) return;
+  if(reveal<listItems.length){reveal++;render();}
+});
+
+$('bMain').addEventListener('click',main);
+$('bPrev').addEventListener('click',prev);
+$('bMark').addEventListener('click',toggleMark);
+$('bExit').addEventListener('click',closeDrill);
+$('peek').addEventListener('click',()=>{ mode==='peek'?(mode='card',render()):openPeek(); });
+
+/* 터치: 탭 = 뜻/다음, 좌우로 밀기 = 이전/다음 */
+let tx=null,ty=null;
+$('stage').addEventListener('pointerdown',e=>{tx=e.clientX;ty=e.clientY;});
+$('stage').addEventListener('pointerup',e=>{
+  if(tx==null) return; const dx=e.clientX-tx, dy=e.clientY-ty; tx=null;
+  if(Math.abs(dx)>60&&Math.abs(dx)>Math.abs(dy)){ dx>0?prev():(shown?main():(shown=true,main())); }
+  else if(Math.abs(dx)<12&&Math.abs(dy)<12) main();
+});
+document.addEventListener('keydown',e=>{
+  if($('drill').hidden) return;
+  const k=e.key;
+  if(k==='Escape'){ if(mode==='peek'){mode='card';render();} else closeDrill(); e.preventDefault(); return; }
+  if(mode==='card'){
+    if(k===' '||k==='Enter'||k==='ArrowRight'){main();e.preventDefault();}
+    else if(k==='ArrowLeft'){prev();e.preventDefault();}
+    else if(k==='x'||k==='X'){toggleMark();}
+    else if(k==='w'||k==='W'){openPeek();}
+  } else {
+    if(k===' '||k==='ArrowRight'){ if(reveal<listItems.length){reveal++;render();} else if(mode==='peek'){mode='card';render();} e.preventDefault(); }
+    else if(k==='ArrowLeft'){ if(reveal>0){reveal--;render();} e.preventDefault(); }
+    else if((k==='w'||k==='W')&&mode==='peek'){mode='card';render();}
+  }
+});
+window.addEventListener('resize',()=>{ if(!$('drill').hidden&&mode==='card') fitWord(); });
+update();
+</script>
+
+</body></html>
